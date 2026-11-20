@@ -1,1 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ういたんの答えを選択しろ‼️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-cream: #faf6ef;
+    --bg-card: #ffffff;
+    --ink-main: #231f20;
+    --ink-sub: #665f5c;
+    --accent-vermilion: #d93829;
+    --accent-vermilion-dark: #b32619;
+    --accent-gold: #c9972c;
+    --accent-gold-soft: #fdf6e3;
+    --border-soft: #e6dfd3;
+    --ok-bg: #eef7f0;
+    --ok-ink: #1e7a3b;
+    --ng-bg: #fdf0ef;
+    --ng-ink: #b92b27;
+    --shadow-card: 0 12px 32px rgba(35, 31, 32, 0.08);
+    --shadow-btn: 0 4px 12px rgba(217, 56, 41, 0.25);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: var(--bg-cream);
+    background-image:
+      radial-gradient(circle at 12% 15%, rgba(217, 56, 41, 0.05) 0, transparent 42%),
+      radial-gradient(circle at 88% 85%, rgba(201, 151, 44, 0.08) 0, transparent 45%);
+    color: var(--ink-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 48px;
+  }
+
+  .app-header {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .brand-tag {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent-vermilion);
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+
+  .sound-btn {
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-main);
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .sound-btn:hover {
+    border-color: var(--accent-vermilion);
+    color: var(--accent-vermilion);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 680px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-soft);
+    border-radius: 24px;
+    box-shadow: var(--shadow-card);
+    padding: 28px 24px 32px;
+  }
+
+  @media (min-width: 600px) {
+    .container {
+      padding: 36px 40px 40px;
+    }
+  }
+
+  /* スタート画面 */
+  .start-screen {
+    text-align: center;
+  }
+
+  .badge-top {
+    display: inline-block;
+    background: var(--accent-gold-soft);
+    color: #8c620a;
+    border: 1px solid #edd59a;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .main-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(24px, 6vw, 36px);
+    font-weight: 900;
+    line-height: 1.3;
+    color: var(--ink-main);
+    margin-bottom: 20px;
+  }
+
+  .rule-box {
+    background: #fcfaf6;
+    border: 1.5px dashed #decfa9;
+    border-radius: 16px;
+    padding: 20px 16px;
+    margin-bottom: 28px;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-main);
+    font-weight: 500;
+  }
+
+  .rule-highlight {
+    display: inline-block;
+    font-weight: 900;
+    font-size: 17px;
+    color: var(--accent-vermilion);
+    background: #fff3f1;
+    padding: 2px 10px;
+    border-radius: 8px;
+    margin: 2px 0;
+  }
+
+  .primary-btn {
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent-vermilion), var(--accent-vermilion-dark));
+    border: none;
+    border-radius: 14px;
+    padding: 16px 36px;
+    cursor: pointer;
+    box-shadow: var(--shadow-btn);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 18px rgba(217, 56, 41, 0.32);
+  }
+
+  .primary-btn:active {
+    transform: translateY(0);
+  }
+
+  /* クイズ画面 */
+  .quiz-screen {
+    display: none;
+  }
+
+  .progress-wrap {
+    margin-bottom: 22px;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-sub);
+    margin-bottom: 8px;
+  }
+
+  .q-counter {
+    color: var(--accent-vermilion);
+    font-size: 15px;
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: #efe9de;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 10%;
+    background: linear-gradient(90deg, var(--accent-gold), var(--accent-vermilion));
+    border-radius: 999px;
+    transition: width 0.25s ease;
+  }
+
+  .kanji-stage {
+    text-align: center;
+    background: #fcfaf6;
+    border: 1px solid var(--border-soft);
+    border-radius: 18px;
+    padding: 28px 16px;
+    margin-bottom: 22px;
+  }
+
+  .kanji-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-sub);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  .kanji-word {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(32px, 8vw, 48px);
+    font-weight: 900;
+    color: var(--ink-main);
+    line-height: 1.3;
+    word-break: break-word;
+  }
+
+  .choices-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 520px) {
+    .choices-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .choice-btn {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink-main);
+    background: #fff;
+    border: 2px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 16px 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.14s ease;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.4;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    border-color: var(--accent-vermilion);
+    background: #fff8f7;
+    transform: translateY(-1px);
+  }
+
+  .choice-btn.selected {
+    border-color: var(--accent-vermilion);
+    background: var(--accent-vermilion);
+    color: #fff;
+  }
+
+  /* 結果画面 */
+  .result-screen {
+    display: none;
+  }
+
 
