@@ -567,9 +567,554 @@
     line-height: 1;
     font-weight: 900;
   }
+
+
+  .flash-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.92) 0%, rgba(255, 224, 236, 0.55) 55%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 999;
+  }
+
+  .flash-overlay.is-flashing {
+    animation: flashBurst 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes flashBurst {
+    0% {
+      opacity: 0.95;
+      transform: scale(1);
+    }
+    45% {
+      opacity: 0.72;
+      transform: scale(1.02);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+  }
+
+  .container.is-flash-pop {
+    animation: containerFlashPop 0.28s ease-out;
+  }
+
+  @keyframes containerFlashPop {
+    0% {
+      transform: scale(0.985);
+      box-shadow: 0 0 36px rgba(255, 77, 121, 0.45), var(--shadow-card);
+    }
+    55% {
+      transform: scale(1.008);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: var(--shadow-card);
+    }
+  }
+
+  .kanji-stage.is-flash-hit {
+    animation: stageFlashHit 0.28s ease-out;
+  }
+
+  @keyframes stageFlashHit {
+    0% {
+      filter: brightness(1.35);
+      transform: scale(0.97);
+    }
+    60% {
+      filter: brightness(1.12);
+      transform: scale(1.015);
+    }
+    100% {
+      filter: brightness(1);
+      transform: scale(1);
+    }
+  }
+
+
+  /* FLASH golden-era punchy effects */
+  .container.is-screen-shake {
+    animation: flashScreenShake 0.24s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
+
+  @keyframes flashScreenShake {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    20% { transform: translate(-5px, 3px) rotate(-0.4deg); }
+    40% { transform: translate(5px, -3px) rotate(0.4deg); }
+    60% { transform: translate(-3px, -2px) rotate(-0.2deg); }
+    80% { transform: translate(3px, 2px) rotate(0.2deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  .choice-btn.is-flash-hit {
+    animation: choiceFlashHit 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes choiceFlashHit {
+    0% { transform: scale(1); filter: brightness(1); }
+    35% { transform: scale(1.06); filter: brightness(1.38); }
+    100% { transform: scale(1); filter: brightness(1); }
+  }
+
+  .cutin-banner {
+    position: fixed;
+    top: 22%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.82) skewX(-8deg);
+    background: linear-gradient(135deg, #ff3b72 0%, #ff85a8 48%, #ffd166 100%);
+    color: #fff;
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+    font-size: clamp(22px, 6vw, 34px);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    padding: 12px 30px;
+    border-radius: 14px;
+    border: 3px solid #ffffff;
+    box-shadow: 0 12px 30px rgba(224, 43, 92, 0.42), 0 0 24px rgba(255, 209, 102, 0.75);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1000;
+    white-space: nowrap;
+  }
+
+  .cutin-banner.is-active {
+    animation: flashCutinAnim 0.56s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .cutin-banner.is-start-long {
+    animation: flashStartCutinLong 0.96s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes flashStartCutinLong {
+    0% {
+      opacity: 0;
+      transform: translate(-125%, -50%) scale(0.82) skewX(-12deg);
+    }
+    18% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.08) skewX(-8deg);
+    }
+    78% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.01) skewX(-8deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(45%, -50%) scale(0.95) skewX(-6deg);
+    }
+  }
+
+  @keyframes flashCutinAnim {
+    0% {
+      opacity: 0;
+      transform: translate(-120%, -50%) scale(0.85) skewX(-12deg);
+    }
+    22% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.06) skewX(-8deg);
+    }
+    75% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) skewX(-8deg);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(35%, -50%) scale(0.95) skewX(-6deg);
+    }
+  }
+
+
+  /* FLASH-style speed lines & particle burst */
+  .speed-lines-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 997;
+    opacity: 0;
+    background: repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      rgba(255, 77, 121, 0.24) 0deg 2deg,
+      rgba(255, 209, 102, 0.16) 2deg 4deg,
+      transparent 4deg 14deg
+    );
+    mask-image: radial-gradient(circle at 50% 50%, transparent 28%, black 75%);
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 28%, black 75%);
+  }
+
+  .speed-lines-layer.is-active {
+    animation: speedLinesFlash 0.36s ease-out forwards;
+  }
+
+  .speed-lines-layer.is-start-long {
+    animation: speedLinesStartLong 0.76s ease-out forwards;
+  }
+
+  @keyframes speedLinesStartLong {
+    0% {
+      opacity: 0.95;
+      transform: scale(1.18) rotate(0deg);
+    }
+    60% {
+      opacity: 0.72;
+      transform: scale(1.04) rotate(6deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.98) rotate(10deg);
+    }
+  }
+
+  @keyframes speedLinesFlash {
+    0% {
+      opacity: 0.92;
+      transform: scale(1.14) rotate(0deg);
+    }
+    55% {
+      opacity: 0.65;
+      transform: scale(1.02) rotate(3deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.96) rotate(5deg);
+    }
+  }
+
+  .burst-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 998;
+    overflow: hidden;
+  }
+
+  .burst-spark {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    font-size: var(--size, 18px);
+    font-weight: 900;
+    color: var(--color, #ff4d79);
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.9);
+    transform: translate(-50%, -50%) scale(0.4);
+    opacity: 0;
+    animation: sparkFly 0.58s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes sparkFly {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+    }
+    30% {
+      opacity: 1;
+      transform: translate(calc(-50% + var(--dx) * 0.45), calc(-50% + var(--dy) * 0.45 - 12px)) scale(1.22) rotate(var(--rot));
+    }
+    100% {
+      opacity: 0;
+      transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy) + 18px)) scale(0.75) rotate(calc(var(--rot) * 1.4));
+    }
+  }
+
+  .choice-btn:not(:disabled) {
+    position: relative;
+  }
+
+  .choice-btn.is-flash-hit::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 20px;
+    border: 2.5px solid #ffd166;
+    opacity: 0;
+    pointer-events: none;
+    animation: choiceRingPulse 0.54s ease-out;
+  }
+
+  @keyframes choiceRingPulse {
+    0% {
+      opacity: 0.95;
+      transform: scale(0.98);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.09);
+    }
+  }
+
+  .score-box.is-result-flash {
+    animation: resultFlashEntrance 0.48s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes resultFlashEntrance {
+    0% {
+      transform: scale(0.88) translateY(14px);
+      filter: brightness(1.45);
+    }
+    55% {
+      transform: scale(1.03) translateY(-2px);
+      filter: brightness(1.15);
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      filter: brightness(1);
+    }
+  }
+
+
+  /* Final reward / perk visual styling on result screen */
+  .perk-box {
+    margin-top: 14px;
+    border-radius: 16px;
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 800;
+    transition: all 0.25s ease;
+  }
+
+  .perk-title {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    opacity: 0.88;
+  }
+
+  .perk-name {
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.45;
+  }
+
+  .result-screen.perk-legend .container-theme,
+  .result-screen.perk-legend .score-box {
+    box-shadow: 0 16px 36px rgba(245, 185, 53, 0.45), 0 0 28px rgba(255, 77, 121, 0.35);
+    border-color: #f5b935;
+  }
+
+  .result-screen.perk-legend .perk-box {
+    background: linear-gradient(135deg, #fff5c4 0%, #ffe0ee 55%, #ffd257 100%);
+    border: 2px solid #e2a21b;
+    color: #5c2b00;
+  }
+
+  .result-screen.perk-gold .perk-box {
+    background: linear-gradient(135deg, #fff8dc 0%, #ffebf3 100%);
+    border: 2px solid #e5a935;
+    color: #7c3f12;
+  }
+
+  .result-screen.perk-silver .perk-box {
+    background: linear-gradient(180deg, #f9f6fb 0%, #f1e8f7 100%);
+    border: 1.5px solid #c7b2d9;
+    color: #493857;
+  }
+
+  .result-screen.perk-bronze .perk-box {
+    background: linear-gradient(180deg, #fff6f9 0%, #fbe4ec 100%);
+    border: 1.5px solid #e4a5bb;
+    color: #7d2544;
+  }
+
+  .result-screen.perk-retry .perk-box {
+    background: linear-gradient(180deg, #f3eef2 0%, #e4d8e0 100%);
+    border: 1.5px solid #9d8995;
+    color: #3a2b34;
+  }
+
+  .result-screen.perk-legend .result-item {
+    border-color: #f3cf76;
+    background: linear-gradient(180deg, #ffffff 0%, #fffdf5 100%);
+  }
+
+  .result-screen.perk-gold .result-item {
+    border-color: #f2d59b;
+  }
+
+  .result-screen.perk-retry .result-item {
+    border-color: #d8c6d1;
+    background: #fcf9fb;
+  }
+
+
+  /* Looping end-screen effect until button click, styled by score */
+  .result-ambient-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 995;
+    display: none;
+    overflow: hidden;
+  }
+
+  .result-ambient-layer.is-running {
+    display: block;
+  }
+
+  .result-ambient-layer.tier-100 {
+    background:
+      radial-gradient(circle at 20% 25%, rgba(255, 209, 102, 0.28) 0, transparent 45%),
+      radial-gradient(circle at 80% 30%, rgba(255, 77, 121, 0.24) 0, transparent 45%),
+      repeating-conic-gradient(
+        from 0deg at 50% 42%,
+        rgba(255, 209, 102, 0.14) 0deg 3deg,
+        transparent 3deg 15deg
+      );
+    animation: ambientSpin100 7s linear infinite;
+  }
+
+  .result-ambient-layer.tier-80 {
+    background:
+      radial-gradient(circle at 50% 35%, rgba(245, 185, 53, 0.22) 0, transparent 52%),
+      repeating-conic-gradient(
+        from 0deg at 50% 42%,
+        rgba(245, 185, 53, 0.11) 0deg 2deg,
+        transparent 2deg 18deg
+      );
+    animation: ambientPulse80 2.4s ease-in-out infinite;
+  }
+
+  .result-ambient-layer.tier-60 {
+    background:
+      radial-gradient(circle at 30% 30%, rgba(199, 146, 234, 0.2) 0, transparent 48%),
+      radial-gradient(circle at 75% 70%, rgba(255, 133, 168, 0.16) 0, transparent 48%);
+    animation: ambientFloat60 3.2s ease-in-out infinite;
+  }
+
+  .result-ambient-layer.tier-40,
+  .result-ambient-layer.tier-20 {
+    background:
+      radial-gradient(circle at 50% 45%, rgba(255, 77, 121, 0.18) 0, transparent 55%);
+    animation: ambientPulseLow 1.8s ease-in-out infinite;
+  }
+
+  .result-ambient-layer.tier-0 {
+    background:
+      radial-gradient(circle at 50% 45%, rgba(66, 36, 48, 0.22) 0, transparent 60%);
+    animation: ambientDimZero 2.6s ease-in-out infinite;
+  }
+
+  @keyframes ambientSpin100 {
+    0% { transform: scale(1.04) rotate(0deg); opacity: 0.85; }
+    50% { transform: scale(1.09) rotate(180deg); opacity: 1; }
+    100% { transform: scale(1.04) rotate(360deg); opacity: 0.85; }
+  }
+
+  @keyframes ambientPulse80 {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.03); }
+  }
+
+  @keyframes ambientFloat60 {
+    0%, 100% { opacity: 0.5; transform: translateY(0px); }
+    50% { opacity: 0.85; transform: translateY(-8px); }
+  }
+
+  @keyframes ambientPulseLow {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.72; }
+  }
+
+  @keyframes ambientDimZero {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.65; }
+  }
+
+  .ambient-floater {
+    position: absolute;
+    left: var(--fx);
+    top: var(--fy);
+    font-size: var(--fsize, 20px);
+    opacity: 0.85;
+    animation: ambientDrift var(--fdur, 3.2s) ease-in-out infinite;
+  }
+
+  @keyframes ambientDrift {
+    0%, 100% {
+      transform: translate(-50%, -50%) translateY(0px) scale(1) rotate(0deg);
+      opacity: 0.75;
+    }
+    50% {
+      transform: translate(-50%, -50%) translateY(-16px) scale(1.15) rotate(12deg);
+      opacity: 1;
+    }
+  }
+
+
+  /* Effect around the clicked choice button without leaking to full screen */
+  .choices-grid {
+    position: relative;
+  }
+
+  .btn-halo-wave {
+    position: absolute;
+    left: var(--bx, 50%);
+    top: var(--by, 50%);
+    width: var(--bw, 160px);
+    height: var(--bh, 60px);
+    transform: translate(-50%, -50%) scale(0.95);
+    border-radius: 22px;
+    border: 2.5px solid #ff6b95;
+    box-shadow: 0 0 18px rgba(255, 77, 121, 0.45), inset 0 0 12px rgba(255, 209, 102, 0.35);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 4;
+    animation: btnHaloExpand 0.68s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes btnHaloExpand {
+    0% {
+      opacity: 0.95;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(1.24);
+    }
+  }
+
+  .btn-orbit-spark {
+    position: absolute;
+    left: var(--ox, 50%);
+    top: var(--oy, 50%);
+    font-size: var(--osize, 14px);
+    font-weight: 900;
+    color: var(--ocolor, #ff4d79);
+    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.95);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 5;
+    transform: translate(-50%, -50%) scale(0.5);
+    animation: btnOrbitPop 0.74s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes btnOrbitPop {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+    }
+    40% {
+      opacity: 1;
+      transform: translate(calc(-50% + var(--odx) * 0.6), calc(-50% + var(--ody) * 0.6)) scale(1.15) rotate(var(--orot));
+    }
+    100% {
+      opacity: 0;
+      transform: translate(calc(-50% + var(--odx)), calc(-50% + var(--ody))) scale(0.75) rotate(calc(var(--orot) * 1.4));
+    }
+  }
+
 </style>
 </head>
 <body>
+<div class="result-ambient-layer" id="resultAmbientLayer" aria-hidden="true"></div>
+<div class="speed-lines-layer" id="speedLinesLayer" aria-hidden="true"></div>
+<div class="burst-layer" id="burstLayer" aria-hidden="true"></div>
+
+<div class="cutin-banner" id="cutinBanner" aria-hidden="true"></div>
+
+<div class="flash-overlay" id="flashOverlay" aria-hidden="true"></div>
+
 
 <header class="app-header">
   <span class="brand-tag" id="topStartBadge">✨ 10問 × 10点 = 100点</span>
@@ -617,7 +1162,7 @@
       <div class="regret-note" id="regretNote"></div>
     </div>
 
-    <div class="share-section">
+        <div class="share-section">
       <div class="share-heading">結果をシェア</div>
       <a class="x-share-btn" id="xShareBtn" href="#" target="_blank" rel="noopener noreferrer">
         <span class="x-mark">𝕏</span>
@@ -734,8 +1279,218 @@ function shuffleArray(arr) {
   return copy;
 }
 
+
+const flashOverlay = document.getElementById("flashOverlay");
+const mainContainer = document.querySelector(".container");
+const kanjiStageEl = document.querySelector(".kanji-stage");
+
+function triggerFlashEffect(targetEl) {
+  if (flashOverlay) {
+    flashOverlay.classList.remove("is-flashing");
+    void flashOverlay.offsetWidth;
+    flashOverlay.classList.add("is-flashing");
+  }
+  if (mainContainer) {
+    mainContainer.classList.remove("is-flash-pop");
+    void mainContainer.offsetWidth;
+    mainContainer.classList.add("is-flash-pop");
+  }
+  if (targetEl) {
+    targetEl.classList.remove("is-flash-hit");
+    void targetEl.offsetWidth;
+    targetEl.classList.add("is-flash-hit");
+  }
+}
+
+
+const cutinBanner = document.getElementById("cutinBanner");
+
+function playTone(freqStart, freqEnd, duration, type = "triangle", volume = 0.14) {
+  if (!soundEnabled) return;
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freqStart, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(freqEnd, audioCtx.currentTime + duration);
+    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (_) {}
+}
+
+function playFlashHitSound(isCorrect) {
+  if (isCorrect) {
+    playTone(587.33, 1046.5, 0.14, "triangle", 0.16);
+  } else {
+    playTone(260, 145, 0.16, "sawtooth", 0.11);
+  }
+}
+
+function showCutin(labelText) {
+  if (!cutinBanner) return;
+  cutinBanner.textContent = labelText;
+  cutinBanner.classList.remove("is-active");
+  void cutinBanner.offsetWidth;
+  cutinBanner.classList.add("is-active");
+}
+
+function triggerScreenShake() {
+  if (!mainContainer) return;
+  mainContainer.classList.remove("is-screen-shake");
+  void mainContainer.offsetWidth;
+  mainContainer.classList.add("is-screen-shake");
+}
+
+
+const speedLinesLayer = document.getElementById("speedLinesLayer");
+const burstLayer = document.getElementById("burstLayer");
+
+function triggerSpeedLines() {
+  if (!speedLinesLayer) return;
+  speedLinesLayer.classList.remove("is-active");
+  void speedLinesLayer.offsetWidth;
+  speedLinesLayer.classList.add("is-active");
+}
+
+function spawnBurstSparks(centerX, centerY, isPositive = true) {
+  if (!burstLayer) return;
+  const symbols = isPositive
+    ? ["💖", "✦", "★", "✨", "⚡"]
+    : ["💥", "⚡", "✦", "💫"];
+  const colors = isPositive
+    ? ["#ff4d79", "#f5b935", "#ff85a8", "#b8326a", "#ff9e2c"]
+    : ["#c6284f", "#7a626c", "#ff4d79", "#422430"];
+
+  const count = isPositive ? 12 : 8;
+  for (let i = 0; i < count; i++) {
+    const spark = document.createElement("span");
+    spark.className = "burst-spark";
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.35;
+    const dist = 68 + Math.random() * 88;
+    const dx = `${Math.cos(angle) * dist}px`;
+    const dy = `${Math.sin(angle) * dist}px`;
+    const rot = `${Math.round((Math.random() - 0.5) * 90)}deg`;
+    const size = `${15 + Math.round(Math.random() * 10)}px`;
+
+    spark.textContent = symbols[i % symbols.length];
+    spark.style.setProperty("--x", `${centerX}px`);
+    spark.style.setProperty("--y", `${centerY}px`);
+    spark.style.setProperty("--dx", dx);
+    spark.style.setProperty("--dy", dy);
+    spark.style.setProperty("--rot", rot);
+    spark.style.setProperty("--size", size);
+    spark.style.setProperty("--color", colors[i % colors.length]);
+
+    burstLayer.appendChild(spark);
+    setTimeout(() => spark.remove(), 620);
+  }
+}
+
+function playResultFanfare(score) {
+  if (!soundEnabled) return;
+  const notes = score >= 80
+    ? [523.25, 659.25, 783.99, 1046.5]
+    : score >= 40
+      ? [440, 554.37, 659.25]
+      : [330, 293.66, 220];
+  notes.forEach((freq, idx) => {
+    setTimeout(() => {
+      playTone(freq, freq * 1.04, 0.16, "triangle", 0.13);
+    }, idx * 85);
+  });
+}
+
+
+const resultAmbientLayer = document.getElementById("resultAmbientLayer");
+let resultLoopInterval = null;
+
+function stopResultLoopEffect() {
+  if (resultLoopInterval) {
+    clearInterval(resultLoopInterval);
+    resultLoopInterval = null;
+  }
+  if (resultAmbientLayer) {
+    resultAmbientLayer.className = "result-ambient-layer";
+    resultAmbientLayer.innerHTML = "";
+  }
+}
+
+function startResultLoopEffect(score) {
+  stopResultLoopEffect();
+  if (!resultAmbientLayer) return;
+
+  let tierClass = "tier-0";
+  let icons = ["💀", "🖤", "💫"];
+  let intervalMs = 1400;
+
+  if (score === 100) {
+    tierClass = "tier-100";
+    icons = ["👑", "💖", "✨", "🌟", "💛"];
+    intervalMs = 750;
+  } else if (score >= 80) {
+    tierClass = "tier-80";
+    icons = ["✨", "💛", "★", "💖"];
+    intervalMs = 950;
+  } else if (score >= 60) {
+    tierClass = "tier-60";
+    icons = ["💜", "✦", "🌸"];
+    intervalMs = 1200;
+  } else if (score >= 20) {
+    tierClass = "tier-20";
+    icons = ["🩷", "⚡", "✦"];
+    intervalMs = 1300;
+  }
+
+  resultAmbientLayer.className = `result-ambient-layer is-running ${tierClass}`;
+
+  for (let i = 0; i < 10; i++) {
+    const el = document.createElement("span");
+    el.className = "ambient-floater";
+    el.textContent = icons[i % icons.length];
+    el.style.setProperty("--fx", `${8 + ((i * 19) % 84)}%`);
+    el.style.setProperty("--fy", `${12 + ((i * 23) % 76)}%`);
+    el.style.setProperty("--fsize", `${18 + (i % 3) * 6}px`);
+    el.style.setProperty("--fdur", `${2.4 + (i % 4) * 0.6}s`);
+    resultAmbientLayer.appendChild(el);
+  }
+
+  resultLoopInterval = setInterval(() => {
+    if (resultScreen.style.display !== "block") {
+      stopResultLoopEffect();
+      return;
+    }
+    const rx = window.innerWidth * (0.18 + Math.random() * 0.64);
+    const ry = window.innerHeight * (0.16 + Math.random() * 0.42);
+    spawnBurstSparks(rx, ry, score >= 40);
+  }, intervalMs);
+}
+
 function startGame() {
   playClickSound();
+  stopResultLoopEffect();
+  triggerFlashEffect(mainContainer);
+  if (speedLinesLayer) {
+    speedLinesLayer.classList.remove("is-active", "is-start-long");
+    void speedLinesLayer.offsetWidth;
+    speedLinesLayer.classList.add("is-start-long");
+  }
+  if (cutinBanner) {
+    cutinBanner.textContent = "⚡ START!! ⚡";
+    cutinBanner.classList.remove("is-active", "is-start-long");
+    void cutinBanner.offsetWidth;
+    cutinBanner.classList.add("is-start-long");
+  }
+  spawnBurstSparks(window.innerWidth / 2, window.innerHeight * 0.42, true);
   sessionQuestions = shuffleArray(QUIZ_DATA).slice(0, TOTAL_QUESTIONS).map(item => {
     const options = shuffleArray([
       { text: item.uitan, isUitan: true },
@@ -776,17 +1531,65 @@ function renderQuestion() {
   });
 }
 
+
+function triggerButtonAroundEffect(btn) {
+  if (!btn || !choicesGrid) return;
+  const gridRect = choicesGrid.getBoundingClientRect();
+  const btnRect = btn.getBoundingClientRect();
+  const relX = btnRect.left - gridRect.left + btnRect.width / 2;
+  const relY = btnRect.top - gridRect.top + btnRect.height / 2;
+
+  const halo = document.createElement("span");
+  halo.className = "btn-halo-wave";
+  halo.style.setProperty("--bx", `${relX}px`);
+  halo.style.setProperty("--by", `${relY}px`);
+  halo.style.setProperty("--bw", `${btnRect.width}px`);
+  halo.style.setProperty("--bh", `${btnRect.height}px`);
+  choicesGrid.appendChild(halo);
+  setTimeout(() => halo.remove(), 740);
+
+  const symbols = ["✦", "★", "✨", "💖", "⚡"];
+  const colors = ["#ff4d79", "#f5b935", "#ff85a8", "#b8326a", "#ff9e2c"];
+  const count = 8;
+
+  for (let i = 0; i < count; i++) {
+    const spark = document.createElement("span");
+    spark.className = "btn-orbit-spark";
+    const angle = (Math.PI * 2 * i) / count + 0.25;
+    const rx = btnRect.width * 0.56 + 18;
+    const ry = btnRect.height * 0.62 + 14;
+    const odx = `${Math.cos(angle) * rx}px`;
+    const ody = `${Math.sin(angle) * ry}px`;
+    const orot = `${Math.round((Math.random() - 0.5) * 70)}deg`;
+    const osize = `${13 + (i % 3) * 3}px`;
+
+    spark.textContent = symbols[i % symbols.length];
+    spark.style.setProperty("--ox", `${relX}px`);
+    spark.style.setProperty("--oy", `${relY}px`);
+    spark.style.setProperty("--odx", odx);
+    spark.style.setProperty("--ody", ody);
+    spark.style.setProperty("--orot", orot);
+    spark.style.setProperty("--osize", osize);
+    spark.style.setProperty("--ocolor", colors[i % colors.length]);
+
+    choicesGrid.appendChild(spark);
+    setTimeout(() => spark.remove(), 800);
+  }
+}
+
 function handleSelect(btn, opt) {
   if (isTransitioning) return;
   isTransitioning = true;
-  playClickSound();
 
   const allBtns = choicesGrid.querySelectorAll(".choice-btn");
   allBtns.forEach(b => (b.disabled = true));
   btn.classList.add("selected");
+  btn.classList.add("is-flash-hit");
+  triggerButtonAroundEffect(btn);
 
   const q = sessionQuestions[currentIndex];
   const isCorrect = opt.isUitan;
+  playClickSound();
 
   userAnswers.push({
     number: currentIndex + 1,
@@ -805,7 +1608,7 @@ function handleSelect(btn, opt) {
     } else {
       showResult();
     }
-  }, 220);
+  }, 360);
 }
 
 function getScoreEvaluation(score) {
@@ -857,6 +1660,7 @@ function getScoreEvaluation(score) {
   };
 }
 
+
 function updateXShareLink(score, badge) {
   const tiles = userAnswers.map(a => (a.isCorrect ? "💖" : "🤍")).join("");
   const currentUrl = window.location.href;
@@ -868,6 +1672,8 @@ function updateXShareLink(score, badge) {
   xShareBtn.href = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
 }
 
+
+
 function showResult() {
   setTopStartBadgeVisible(false);
   quizScreen.style.display = "none";
@@ -877,6 +1683,7 @@ function showResult() {
   const score = correctCount * POINTS_PER_QUESTION;
   const evalData = getScoreEvaluation(score);
 
+  resultScreen.className = `result-screen ${evalData.tierClass}`;
   scoreBox.className = `score-box ${evalData.tierClass}`;
   tierBadge.textContent = evalData.badge;
   finalScore.textContent = score;
@@ -884,6 +1691,14 @@ function showResult() {
   regretNote.textContent = evalData.regret;
 
   updateXShareLink(score, evalData.badge);
+  scoreBox.classList.remove("is-result-flash");
+  void scoreBox.offsetWidth;
+  scoreBox.classList.add("is-result-flash");
+  triggerFlashEffect(scoreBox);
+  triggerSpeedLines();
+  playResultFanfare(score);
+  spawnBurstSparks(window.innerWidth / 2, window.innerHeight * 0.28, score >= 40);
+  startResultLoopEffect(score);
 
   resultList.innerHTML = "";
 
