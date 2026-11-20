@@ -287,4 +287,422 @@
     display: none;
   }
 
+  .score-panel {
+    text-align: center;
+    background: linear-gradient(180deg, #fffaf0 0%, #fcf8f2 100%);
+    border: 1.5px solid #ead9b0;
+    border-radius: 18px;
+    padding: 24px 16px;
+    margin-bottom: 24px;
+  }
 
+  .score-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-sub);
+    margin-bottom: 4px;
+  }
+
+  .score-value {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(40px, 10vw, 56px);
+    font-weight: 900;
+    color: var(--accent-vermilion);
+    line-height: 1.15;
+  }
+
+  .score-unit {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink-main);
+    margin-left: 4px;
+  }
+
+  .rank-comment {
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink-main);
+  }
+
+  .result-list-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--ink-main);
+    margin-bottom: 12px;
+    padding-left: 10px;
+    border-left: 4px solid var(--accent-vermilion);
+  }
+
+  .result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .result-item {
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: #fff;
+  }
+
+  .result-item.is-correct {
+    border-left: 5px solid var(--ok-ink);
+    background: #fafdfb;
+  }
+
+  .result-item.is-wrong {
+    border-left: 5px solid var(--ng-ink);
+    background: #fffbfb;
+  }
+
+  .result-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .result-kanji {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--ink-main);
+  }
+
+  .verdict-badge {
+    font-size: 12px;
+    font-weight: 900;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .verdict-ok {
+    background: var(--ok-bg);
+    color: var(--ok-ink);
+  }
+
+  .verdict-ng {
+    background: var(--ng-bg);
+    color: var(--ng-ink);
+  }
+
+  .result-details {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink-sub);
+  }
+
+  .result-details strong {
+    color: var(--ink-main);
+  }
+
+  .retry-wrap {
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="brand-tag">10問 × 10点 = 100点</span>
+  <button type="button" class="sound-btn" id="soundToggle" aria-pressed="false">🔊 効果音：ON</button>
+</header>
+
+<main class="container">
+  <!-- スタート画面 -->
+  <section class="start-screen" id="startScreen">
+    <div class="badge-top">読み当てチャレンジ</div>
+    <h1 class="main-title">ういたんの答えを<br>選択しろ‼️</h1>
+    <div class="rule-box">
+      辞書通りの正しい読みではなく、<br>
+      <span class="rule-highlight">「ういたんが実際に選んだ解答」</span><br>
+      を当てるとポイント獲得！<br>
+      （10問×10点＝100点満点）
+    </div>
+    <button type="button" class="primary-btn" id="startBtn">ゲームスタート</button>
+  </section>
+
+  <!-- クイズ画面 -->
+  <section class="quiz-screen" id="quizScreen" aria-live="polite">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="q-counter" id="qCounter">第 1 / 10 問</span>
+        <span id="qSubLabel">ういたんの解答を選ぼう</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+
+    <div class="kanji-stage">
+      <div class="kanji-label">お題</div>
+      <div class="kanji-word" id="kanjiWord">上位陣</div>
+    </div>
+
+    <div class="choices-grid" id="choicesGrid"></div>
+  </section>
+
+  <!-- 結果画面 -->
+  <section class="result-screen" id="resultScreen">
+    <div class="score-panel">
+      <div class="score-label">あなたの獲得スコア</div>
+      <div class="score-value"><span id="finalScore">0</span><span class="score-unit">点</span></div>
+      <div class="rank-comment" id="rankComment"></div>
+    </div>
+
+    <h2 class="result-list-title">全10問 結果一覧</h2>
+    <div class="result-list" id="resultList"></div>
+
+    <div class="retry-wrap">
+      <button type="button" class="primary-btn" id="retryBtn">もう一度遊ぶ</button>
+    </div>
+  </section>
+</main>
+
+<script>
+const QUIZ_DATA = [
+  { kanji: "上位陣", uitan: "じょういぐん", correct: "じょういじん", w1: "かみくらじん", w2: "じょういぎん" },
+  { kanji: "錦糸卵", uitan: "めんいとたまご", correct: "きんしたまご", w1: "にしきいとたまご", w2: "きんしらん" },
+  { kanji: "道標", uitan: "どうひょう", correct: "みちしるべ", w1: "どうひょうばん", w2: "みちひょう" },
+  { kanji: "塩梅", uitan: "しおうめ", correct: "あんばい", w1: "えんばい", w2: "しおあんばい" },
+  { kanji: "成金", uitan: "せいきん", correct: "なりきん", w1: "なるきん", w2: "せいこん" },
+  { kanji: "相応しい", uitan: "そうおうしい", correct: "ふさわしい", w1: "あいおうしい", w2: "そうおうらしい" },
+  { kanji: "七転八倒", uitan: "ななころびやとう", correct: "しちてんばっとう", w1: "ななてんはっとう", w2: "しちころびやとう" },
+  { kanji: "神輿", uitan: "かみこう", correct: "みこし", w1: "しんよ", w2: "かみこし" },
+  { kanji: "音速", uitan: "おとそく", correct: "おんそく", w1: "ねそく", w2: "おとはやい" },
+  { kanji: "抗ってるの", uitan: "こおってるの", correct: "あらがってるの", w1: "こうしてるの", w2: "こばんでるの" },
+  { kanji: "頭文字", uitan: "あたまもじ", correct: "かしらもじ", w1: "ずもじ", w2: "あたまじ" },
+  { kanji: "千着", uitan: "ちぎ", correct: "せんちゃく", w1: "ちちゃく", w2: "せんぎ" },
+  { kanji: "画鋲", uitan: "がじゅう", correct: "がびょう", w1: "えびょう", w2: "がひょう" },
+  { kanji: "痕跡", uitan: "あとあと", correct: "こんせき", w1: "あとせき", w2: "こんあと" },
+  { kanji: "読唇術", uitan: "どくくちびるじゅつ", correct: "どくしんじゅつ", w1: "よみくちびるじゅつ", w2: "どくくちじゅつ" },
+  { kanji: "汎用", uitan: "ぼんよう", correct: "はんよう", w1: "ぼうよう", w2: "はんもち" },
+  { kanji: "外反母趾", uitan: "そとはんぼしゃん", correct: "がいはんぼし", w1: "そとはんぼし", w2: "がいはんぼしゃん" },
+  { kanji: "背筋", uitan: "せきん", correct: "せすじ", w1: "はいきん", w2: "せきんじ" },
+  { kanji: "小鳥遊", uitan: "うぐいす", correct: "たかなし", w1: "ことりあそび", w2: "こどりゆう" },
+  { kanji: "癌", uitan: "いわつぶ", correct: "がん", w1: "あん", w2: "やま" },
+  { kanji: "新参者", uitan: "しんにんじゃ", correct: "しんざんもの", w1: "しんさんしゃ", w2: "あらさんもの" },
+  { kanji: "現場", uitan: "げんば", correct: "げんば", w1: "げんじょう", w2: "あらば" },
+  { kanji: "飯盒炊飯", uitan: "はんかますいはん", correct: "はんごうすいはん", w1: "めしがますいはん", w2: "はんごうめし" },
+  { kanji: "落雷", uitan: "おちかみなり", correct: "らくらい", w1: "おちらい", w2: "らっかみな" },
+  { kanji: "今時", uitan: "こんじき", correct: "いまどき", w1: "こんじ", w2: "いまとき" },
+  { kanji: "師走", uitan: "しっそう", correct: "しわす", w1: "しそう", w2: "しはしり" },
+  { kanji: "線状降水帯", uitan: "せんぷくこうすいたい", correct: "せんじょうこうすいたい", w1: "せんじょうふりすいたい", w2: "せんぷくふりたい" },
+  { kanji: "裸足", uitan: "らぞく", correct: "はだし", w1: "らそく", w2: "はだあし" },
+  { kanji: "漂流", uitan: "ひょうだく", correct: "ひょうりゅう", w1: "ただよいながれ", w2: "ひょうる" },
+  { kanji: "アラブ首長国連邦", uitan: "あらぶくびながこくれんぽう", correct: "あらぶしゅちょうこくれんぽう", w1: "あらぶくびおさこくれんぽう", w2: "あらぶしゅちょうれんぽう" }
+];
+
+const TOTAL_QUESTIONS = 10;
+const POINTS_PER_QUESTION = 10;
+
+let soundEnabled = true;
+let audioCtx = null;
+let sessionQuestions = [];
+let currentIndex = 0;
+let userAnswers = [];
+let isTransitioning = false;
+
+const startScreen = document.getElementById("startScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultScreen = document.getElementById("resultScreen");
+const startBtn = document.getElementById("startBtn");
+const retryBtn = document.getElementById("retryBtn");
+const soundToggle = document.getElementById("soundToggle");
+const qCounter = document.getElementById("qCounter");
+const progressBar = document.getElementById("progressBar");
+const kanjiWord = document.getElementById("kanjiWord");
+const choicesGrid = document.getElementById("choicesGrid");
+const finalScore = document.getElementById("finalScore");
+const rankComment = document.getElementById("rankComment");
+const resultList = document.getElementById("resultList");
+
+function playClickSound() {
+  if (!soundEnabled) return;
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(760, audioCtx.currentTime + 0.07);
+    gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.08);
+  } catch (_) {}
+}
+
+function playFinishSound() {
+  if (!soundEnabled) return;
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+    const notes = [523.25, 659.25, 783.99, 1046.5];
+    notes.forEach((freq, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const startTime = audioCtx.currentTime + idx * 0.08;
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(0.11, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.22);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + 0.23);
+    });
+  } catch (_) {}
+}
+
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function startGame() {
+  playClickSound();
+  sessionQuestions = shuffleArray(QUIZ_DATA).slice(0, TOTAL_QUESTIONS).map(item => {
+    const options = shuffleArray([
+      { text: item.uitan, isUitan: true },
+      { text: item.correct, isUitan: false },
+      { text: item.w1, isUitan: false },
+      { text: item.w2, isUitan: false }
+    ]);
+    return {
+      ...item,
+      options
+    };
+  });
+  currentIndex = 0;
+  userAnswers = [];
+  isTransitioning = false;
+
+  startScreen.style.display = "none";
+  resultScreen.style.display = "none";
+  quizScreen.style.display = "block";
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = sessionQuestions[currentIndex];
+  qCounter.textContent = `第 ${currentIndex + 1} / ${TOTAL_QUESTIONS} 問`;
+  progressBar.style.width = `${((currentIndex + 1) / TOTAL_QUESTIONS) * 100}%`;
+  kanjiWord.textContent = q.kanji;
+  choicesGrid.innerHTML = "";
+
+  q.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "choice-btn";
+    btn.textContent = opt.text;
+    btn.addEventListener("click", () => handleSelect(btn, opt));
+    choicesGrid.appendChild(btn);
+  });
+}
+
+function handleSelect(btn, opt) {
+  if (isTransitioning) return;
+  isTransitioning = true;
+  playClickSound();
+
+  const allBtns = choicesGrid.querySelectorAll(".choice-btn");
+  allBtns.forEach(b => (b.disabled = true));
+  btn.classList.add("selected");
+
+  const q = sessionQuestions[currentIndex];
+  const isCorrect = opt.isUitan;
+
+  userAnswers.push({
+    number: currentIndex + 1,
+    kanji: q.kanji,
+    selected: opt.text,
+    uitan: q.uitan,
+    correct: q.correct,
+    isCorrect
+  });
+
+  setTimeout(() => {
+    currentIndex++;
+    if (currentIndex < TOTAL_QUESTIONS) {
+      isTransitioning = false;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 220);
+}
+
+function getRankComment(score) {
+  if (score === 100) return "完璧すぎる！！ういたんの脳内と完全シンクロ🔥";
+  if (score >= 80) return "すごい！ういたんの思考回路をかなり読めてる✨";
+  if (score >= 50) return "いい線いってる！ういたんワールドの住人レベル👏";
+  if (score >= 20) return "常識にとらわれすぎかも！？ういたん流の感性を磨こう！";
+  return "まさかの全滅…？次はういたんの自由な発想に賭けてみよう！";
+}
+
+function showResult() {
+  quizScreen.style.display = "none";
+  resultScreen.style.display = "block";
+  playFinishSound();
+
+  const correctCount = userAnswers.filter(a => a.isCorrect).length;
+  const score = correctCount * POINTS_PER_QUESTION;
+
+  finalScore.textContent = score;
+  rankComment.textContent = getRankComment(score);
+  resultList.innerHTML = "";
+
+  userAnswers.forEach(item => {
+    const div = document.createElement("div");
+    div.className = `result-item ${item.isCorrect ? "is-correct" : "is-wrong"}`;
+
+    const badgeClass = item.isCorrect ? "verdict-ok" : "verdict-ng";
+    const badgeText = item.isCorrect ? "正解（+10点）" : "不正解（0点）";
+
+    div.innerHTML = `
+      <div class="result-top">
+        <span class="result-kanji">Q${item.number}. ${item.kanji}</span>
+        <span class="verdict-badge ${badgeClass}">${badgeText}</span>
+      </div>
+      <div class="result-details">
+        あなたの選択：<strong>${item.selected}</strong><br>
+        ういたんの答え：<strong>${item.uitan}</strong> ／ 辞書の正しい読み：${item.correct}
+      </div>
+    `;
+    resultList.appendChild(div);
+  });
+}
+
+soundToggle.addEventListener("click", () => {
+  soundEnabled = !soundEnabled;
+  soundToggle.setAttribute("aria-pressed", String(!soundEnabled));
+  soundToggle.textContent = soundEnabled ? "🔊 効果音：ON" : "🔇 効果音：OFF";
+  if (soundEnabled) playClickSound();
+});
+
+startBtn.addEventListener("click", startGame);
+retryBtn.addEventListener("click", startGame);
+</script>
+</body>
+</html>
